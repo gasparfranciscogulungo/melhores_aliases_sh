@@ -15,7 +15,7 @@
 
 ## 🎥 Demonstração
 
-<!-- Vídeo otimizado local -->
+<!-- Vídeo otimizado embebido -->
 <div align="center">
   <video width="100%" controls muted loop style="max-width: 800px;">
     <source src="demo/exemplo.mp4" type="video/mp4">
