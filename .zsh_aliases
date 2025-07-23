@@ -1,0 +1,210 @@
+# ===============================================================================
+#                        ZSH ALIASES - AUTOMAÇÃO DE PROCESSOS
+# ===============================================================================
+# Arquivo: .zsh_aliases
+# Data: 23 de julho de 2025
+# Uso: source ~/.zsh_aliases no seu .zshrc
+
+# ===============================================================================
+# 🤖 GITHUB COPILOT CLI - ALIASES ESSENCIAIS
+# ===============================================================================
+alias cop='gh copilot suggest'
+alias copgit='gh copilot suggest --type git'
+alias copgh='gh copilot suggest --type gh'
+alias copex='gh copilot explain'
+alias pergunta='gh copilot suggest'
+alias explica='gh copilot explain'
+
+# ===============================================================================
+# 📁 NAVEGAÇÃO RÁPIDA
+# ===============================================================================
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ll='ls -alF --color=auto'
+alias la='ls -A --color=auto'
+alias lh='ls -lah --color=auto'
+alias lsize='ls -lSrh --color=auto'
+
+# ===============================================================================
+# 🔧 SISTEMA E MONITORAMENTO
+# ===============================================================================
+alias sysinfo='uname -a && free -h && df -h'
+alias mem='free -h'
+alias disk='df -h'
+alias processes='ps aux --sort=-%cpu | head -20'
+alias netports='ss -tuln'
+
+# ===============================================================================
+# 🌐 REDE E DNS
+# ===============================================================================
+alias myip='curl -s http://whatismyip.akamai.com/'
+alias localip='hostname -I | cut -d" " -f1'
+alias dnstest='nslookup google.com'
+alias dnscheck='cat /etc/resolv.conf'
+alias pingtest='ping -c 5 8.8.8.8'
+
+# ===============================================================================
+# 📦 GERENCIAMENTO DE PACOTES
+# ===============================================================================
+alias install='sudo apt install'
+alias update='sudo apt update && sudo apt upgrade'
+alias search='apt search'
+alias remove='sudo apt remove'
+alias cleanup='sudo apt autoremove && sudo apt autoclean'
+
+# ===============================================================================
+# 🎯 GIT PRODUTIVO
+# ===============================================================================
+alias g='git'
+alias gs='git status'
+alias ga='git add'
+alias gaa='git add .'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gp='git push'
+alias gpl='git pull'
+alias gl='git log --oneline'
+alias gd='git diff'
+alias gb='git branch'
+alias gco='git checkout'
+alias glog='git log --oneline --graph --decorate --all'
+
+# ===============================================================================
+# 🚀 DESENVOLVIMENTO
+# ===============================================================================
+alias py='python3'
+alias pip='pip3'
+alias ni='npm install'
+alias nr='npm run'
+alias ns='npm start'
+alias code='code .'
+
+# ===============================================================================
+# 🔐 SEGURANÇA E PERMISSÕES
+# ===============================================================================
+alias 755='chmod 755'
+alias 644='chmod 644'
+alias please='sudo'
+
+# ===============================================================================
+# 🎨 ALIASES WSL ESPECÍFICOS
+# ===============================================================================
+alias explorer='explorer.exe .'
+alias notepad='notepad.exe'
+alias windocs='cd /mnt/c/Users/$USER/Documents'
+alias windesktop='cd /mnt/c/Users/$USER/Desktop'
+
+# ===============================================================================
+# 💡 PRODUTIVIDADE
+# ===============================================================================
+alias h='history | tail -20'
+alias hgrep='history | grep'
+alias clr='clear'
+alias reload='source ~/.zshrc'
+alias aliases='alias | grep -E "^[a-z]+" | sort'
+
+# ===============================================================================
+# 🎯 ALIASES PERSONALIZADOS AVANÇADOS
+# ===============================================================================
+
+# Função para criar e entrar em diretório
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+# Função para backup rápido
+backup() {
+    if [ $# -eq 0 ]; then
+        echo "Uso: backup <arquivo_ou_pasta>"
+        return 1
+    fi
+    cp -r "$1" "$1.backup.$(date +%Y%m%d_%H%M%S)"
+}
+
+# Função para extrair arquivos
+extract() {
+    if [ -f "$1" ]; then
+        case "$1" in
+            *.tar.bz2)   tar xjf "$1"     ;;
+            *.tar.gz)    tar xzf "$1"     ;;
+            *.bz2)       bunzip2 "$1"     ;;
+            *.rar)       unrar x "$1"     ;;
+            *.gz)        gunzip "$1"      ;;
+            *.tar)       tar xf "$1"      ;;
+            *.tbz2)      tar xjf "$1"     ;;
+            *.tgz)       tar xzf "$1"     ;;
+            *.zip)       unzip "$1"       ;;
+            *.Z)         uncompress "$1"  ;;
+            *.7z)        7z x "$1"        ;;
+            *)           echo "'$1' não pode ser extraído via extract()" ;;
+        esac
+    else
+        echo "'$1' não é um arquivo válido!"
+    fi
+}
+
+# Função para encontrar arquivos grandes
+findlarge() {
+    find . -type f -size +${1:-100M} -exec ls -lh {} \; | awk '{ print $9 ": " $5 }'
+}
+
+# Função para buscar texto em arquivos
+findtext() {
+    if [ $# -eq 0 ]; then
+        echo "Uso: findtext <texto_para_buscar> [extensão]"
+        return 1
+    fi
+    
+    if [ $# -eq 2 ]; then
+        find . -name "*.$2" -type f -exec grep -l "$1" {} \;
+    else
+        grep -r "$1" .
+    fi
+}
+
+# Função para ver uso de porta
+port() {
+    if [ $# -eq 0 ]; then
+        echo "Uso: port <número_da_porta>"
+        return 1
+    fi
+    lsof -i :$1
+}
+
+# Função para weather
+weather() {
+    curl -s "wttr.in/${1:-Luanda}?lang=pt"
+}
+
+# Função para criar servidor HTTP simples
+serve() {
+    local port=${1:-8000}
+    python3 -m http.server $port
+}
+
+# ===============================================================================
+# 🎉 ALIASES DIVERTIDOS E ÚTEIS
+# ===============================================================================
+alias fucking='sudo'
+alias wtf='dmesg | tail -20'
+alias now='date +"%T"'
+alias today='date +"%d-%m-%Y"'
+alias calc='bc -l'
+alias path='echo $PATH | tr ":" "\n"'
+
+# ===============================================================================
+# 📊 INFORMAÇÕES DO SISTEMA
+# ===============================================================================
+alias cpuinfo='lscpu'
+alias meminfo='cat /proc/meminfo | head -20'
+alias diskinfo='lsblk'
+alias usbinfo='lsusb'
+alias netinfo='ip addr show'
+
+# ===============================================================================
+# 🔧 ALIASES PARA LOGS
+# ===============================================================================
+alias syslog='sudo tail -f /var/log/syslog'
+alias authlog='sudo tail -f /var/log/auth.log'
+alias kernlog='sudo tail -f /var/log/kern.log'
